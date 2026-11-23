@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: crashloop-demo, namespace: monitoring-lab}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: crashloop-demo}}
+  template:
+    metadata: {labels: {app: crashloop-demo}}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: crash
+          image: busybox:1.37.0
+          command: ["sh", "-c", "echo intentional crash; exit 1"]

@@ -1,0 +1,2 @@
+# Application downtime
+**Symptoms:** ApplicationDown alert and no service endpoints. **Investigate:** `kubectl get deploy,pods,endpointslice -n monitoring-lab`; check Prometheus targets and logs. **Resolve:** restore replicas with `kubectl scale deployment paytrack -n monitoring-lab --replicas=2`. **Validate:** rollout, `/ready`, targets UP. **Prevent:** HPA minimum replicas and availability alerts.

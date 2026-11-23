@@ -1,0 +1,13 @@
+grafana:
+  adminPassword: admin
+  persistence: {enabled: false}
+prometheus:
+  prometheusSpec:
+    retention: 2d
+    serviceMonitorSelectorNilUsesHelmValues: false
+    resources:
+      requests: {cpu: 200m, memory: 1Gi}
+      limits: {memory: 2Gi}
+alertmanager:
+  alertmanagerSpec:
+    resources: {requests: {cpu: 50m, memory: 128Mi}}

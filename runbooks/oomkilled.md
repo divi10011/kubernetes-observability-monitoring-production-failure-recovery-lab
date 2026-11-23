@@ -1,0 +1,2 @@
+# OOMKilled
+**Symptoms:** container terminated with reason `OOMKilled`. **Investigate:** `kubectl describe pod -n monitoring-lab POD`; `kubectl top pod -n monitoring-lab POD`. Requests affect scheduling; limits cap memory and exceeding a limit kills the container. **Resolve:** reduce consumption or raise the justified limit. **Validate:** restart count and memory trend. **Prevent:** load tests and realistic requests/limits.

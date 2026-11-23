@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: imagepull-demo, namespace: monitoring-lab}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: imagepull-demo}}
+  template:
+    metadata: {labels: {app: imagepull-demo}}
+    spec:
+      containers:
+        - name: invalid-image
+          image: nginx:this-tag-does-not-exist

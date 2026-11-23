@@ -1,0 +1,2 @@
+# Readiness probe failure
+**Symptoms:** pod Running but not Ready; EndpointSlice removes it. **Investigate:** `kubectl describe pod -n monitoring-lab POD`; `kubectl get endpointslice -n monitoring-lab -l kubernetes.io/service-name=paytrack`. **Resolve:** restore dependency/config then restart if needed. **Validate:** Ready `1/1` and endpoints return. **Prevent:** keep readiness checks dependency-focused.

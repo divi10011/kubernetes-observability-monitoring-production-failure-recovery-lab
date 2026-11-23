@@ -1,0 +1,2 @@
+# CrashLoopBackOff
+**Symptoms:** rising restarts, `CrashLoopBackOff`. **Investigate:** `kubectl describe pod -n monitoring-lab POD`; `kubectl logs -n monitoring-lab POD --previous`. Read the last exit code and previous logs. **Resolve:** fix command/config/image, then `kubectl rollout restart deployment/NAME -n monitoring-lab`. **Validate:** `kubectl get pods -n monitoring-lab`, restart counter stays stable. **Prevent:** startup probes, tested configuration, bounded retries.

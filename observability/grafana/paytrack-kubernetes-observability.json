@@ -1,0 +1,11 @@
+{"title":"PayTrack Kubernetes Observability","uid":"paytrack-k8s","schemaVersion":41,"version":1,"refresh":"15s","time":{"from":"now-1h","to":"now"},"panels":[
+{"id":1,"title":"Application health","type":"stat","targets":[{"expr":"min(up{job=\"paytrack\"})","refId":"A"}],"gridPos":{"x":0,"y":0,"w":6,"h":4}},
+{"id":2,"title":"Request throughput","type":"timeseries","targets":[{"expr":"sum(rate(paytrack_http_requests_total[5m]))","refId":"A"}],"gridPos":{"x":6,"y":0,"w":6,"h":4}},
+{"id":3,"title":"HTTP error rate","type":"timeseries","targets":[{"expr":"sum(rate(paytrack_http_errors_total{status_code=~\"5..\"}[5m]))","refId":"A"}],"gridPos":{"x":12,"y":0,"w":6,"h":4}},
+{"id":4,"title":"P95 request latency","type":"timeseries","targets":[{"expr":"histogram_quantile(0.95,sum(rate(paytrack_http_request_duration_seconds_bucket[5m])) by (le))","refId":"A"}],"gridPos":{"x":18,"y":0,"w":6,"h":4}},
+{"id":5,"title":"CPU consumption","type":"timeseries","targets":[{"expr":"sum(rate(container_cpu_usage_seconds_total{namespace=\"monitoring-lab\",container=\"paytrack\"}[5m]))","refId":"A"}],"gridPos":{"x":0,"y":4,"w":6,"h":4}},
+{"id":6,"title":"Memory consumption","type":"timeseries","targets":[{"expr":"sum(container_memory_working_set_bytes{namespace=\"monitoring-lab\",container=\"paytrack\"})","refId":"A"}],"gridPos":{"x":6,"y":4,"w":6,"h":4}},
+{"id":7,"title":"Pod restart count","type":"timeseries","targets":[{"expr":"sum(kube_pod_container_status_restarts_total{namespace=\"monitoring-lab\",container=\"paytrack\"})","refId":"A"}],"gridPos":{"x":12,"y":4,"w":6,"h":4}},
+{"id":8,"title":"Running versus desired replicas","type":"timeseries","targets":[{"expr":"kube_deployment_status_replicas_available{namespace=\"monitoring-lab\",deployment=\"paytrack\"}","refId":"A"},{"expr":"kube_deployment_spec_replicas{namespace=\"monitoring-lab\",deployment=\"paytrack\"}","refId":"B"}],"gridPos":{"x":18,"y":4,"w":6,"h":4}},
+{"id":9,"title":"Kubernetes pod health","type":"stat","targets":[{"expr":"sum(kube_pod_status_ready{namespace=\"monitoring-lab\",condition=\"true\"})","refId":"A"}],"gridPos":{"x":0,"y":8,"w":12,"h":4}},
+{"id":10,"title":"Alert status","type":"stat","targets":[{"expr":"count(ALERTS{namespace=\"monitoring-lab\",alertstate=\"firing\"})","refId":"A"}],"gridPos":{"x":12,"y":8,"w":12,"h":4}}]}

@@ -1,0 +1,22 @@
+# Use only after creating the splunk-hec Secret in monitoring-lab.
+env:
+  - name: SPLUNK_HEC_HOST
+    valueFrom: {secretKeyRef: {name: splunk-hec, key: SPLUNK_HEC_HOST}}
+  - name: SPLUNK_HEC_PORT
+    valueFrom: {secretKeyRef: {name: splunk-hec, key: SPLUNK_HEC_PORT}}
+  - name: SPLUNK_HEC_TOKEN
+    valueFrom: {secretKeyRef: {name: splunk-hec, key: SPLUNK_HEC_TOKEN}}
+  - name: SPLUNK_INDEX
+    valueFrom: {secretKeyRef: {name: splunk-hec, key: SPLUNK_INDEX}}
+config:
+  outputs: |
+    [OUTPUT]
+        Name splunk
+        Match kube.*
+        Host ${SPLUNK_HEC_HOST}
+        Port ${SPLUNK_HEC_PORT}
+        Splunk_Token ${SPLUNK_HEC_TOKEN}
+        Splunk_Index ${SPLUNK_INDEX}
+        Splunk_Send_Raw On
+        TLS On
+        TLS.Verify On
