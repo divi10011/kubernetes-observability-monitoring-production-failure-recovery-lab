@@ -10,6 +10,7 @@ import logging
 import os
 import time
 from contextlib import asynccontextmanager
+from enum import Enum
 from typing import Annotated
 from uuid import UUID, uuid4
 
@@ -49,24 +50,34 @@ class PaymentCreate(BaseModel):
     """Input for a simulated payment; do not submit real customer data."""
 
     amount: Annotated[float, Field(gt=0, le=1_000_000)]
-    currency: Annotated[str, Field(min_length=3, max_length=3)] = "USD"
+    currency: "Currency" = "USD"
     reference: Annotated[str | None, Field(max_length=64)] = None
 
-    @field_validator("currency")
+    @field_validator("currency", mode="before")
     @classmethod
-    def validate_currency(cls, currency: str) -> str:
+    def validate_currency(cls, currency: str | "Currency") -> str:
+        if isinstance(currency, Currency):
+            return currency.value
         normalized = currency.upper()
-        if not normalized.isalpha():
-            raise ValueError("currency must contain three alphabetic characters")
         return normalized
+
+
+class Currency(str, Enum):
+    USD = "USD"
+    INR = "INR"
 
 
 class Payment(BaseModel):
     id: UUID
     amount: float
-    currency: str
+    currency: Currency
     reference: str | None
-    status: str
+    status: str = "accepted"
+
+
+class PaymentList(BaseModel):
+    items: list[Payment]
+    count: int
 
 
 def _truthy_environment_value(name: str) -> bool:
@@ -158,10 +169,10 @@ async def ready(request: Request) -> dict[str, str]:
     return {"status": "ready"}
 
 
-@app.get("/payments")
-async def list_payments(request: Request) -> dict[str, list[Payment] | int]:
+@app.get("/payments", response_model=PaymentList)
+async def list_payments(request: Request) -> PaymentList:
     payments = [Payment.model_validate(payment) for payment in request.app.state.payments]
-    return {"items": payments, "count": len(payments)}
+    return PaymentList(items=payments, count=len(payments))
 
 
 @app.post("/payments", response_model=Payment, status_code=status.HTTP_201_CREATED)
