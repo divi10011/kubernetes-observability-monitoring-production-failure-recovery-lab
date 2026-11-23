@@ -1,4 +1,4 @@
-# Kubernetes Observability, Monitoring & Production Failure Recovery Lab
+# Kubernetes Observability, Monitoring & Production Failure Recovery Lab(PayTrack)
 
 PayTrack is a simulated FastAPI payment API running locally on Kind. It demonstrates how metrics, logs, alerts, and runbooks work together during recovery.
 
